@@ -35,8 +35,14 @@ module HydraAttribute
         changed = false
         all_models.each do |model|
           model.entity_id = owner.id
-          model.save
-          changed = true unless model.previous_changes.blank?
+          model_changed = !model.previous_changes.blank?
+          changed = true if model_changed
+
+          unless model.value.nil?
+            model.save
+          else
+            model.delete unless model.new_record?
+          end
         end
         changed
       end

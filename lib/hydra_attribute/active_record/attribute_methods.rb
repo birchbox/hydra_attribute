@@ -56,10 +56,10 @@ module HydraAttribute
                   raise MissingAttributeInHydraSetError, %(Hydra attribute "#{hydra_attribute.name}" does not exist in hydra set "\#{self.class.hydra_set(hydra_set_id).name}")
                 end
 
-                if value_model = hydra_value_model(#{hydra_attribute.id})
+                if value_model = unmemoized_hydra_value_model(#{hydra_attribute.id})
                   value_model.#{send}
                 else
-                  missing_attribute('#{hydra_attribute.name}', caller)
+                  nil # assume value is nil if missing
                 end
               end
             EOS
